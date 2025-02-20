@@ -1,0 +1,49 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+
+#1. How many orders were placed in January?
+Select Count(distinct orderID)
+From BIT_DB.JanSales
+Where length(orderID)=6
+And orderID<>"Order ID";
+
+#2. How many of those orders were for an iPhone? 
+Select Count(distinct orderID)
+From BIT_DB.JanSales
+Where product="iPhone"
+And length(orderID)=6
+And orderID<>"Order ID";
+
+#3. Select the customer account numbers for all the orders that were placed in February. 
+Select Distinct acctnum
+From BIT_DB.customers
+Inner Join BIT_DB.FebSales
+On BIT_DB.customers.order_id=BIT_DB.FebSales.orderID
+Where length(orderID)=6
+And orderID<>"Order ID";
+
+#4. Which product was the cheapest one sold in January, and what was the price? 
+Select product, Min(price)
+From BIT_DB.JanSales
+Group By product, price
+Order By price Asc
+Limit 1;
+
+#5. What is the total revenue for each product sold in January?
+Select product, Sum(quantity)*price as revenue
+From BIT_DB.JanSales
+Group By product;
+
+#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+Select product, Sum(quantity), Sum(quantity)*price as revenue
+From BIT_DB.FebSales
+Where location="548 Lincoln St, Seattle, WA 98101"
+Group By product;
+
+#7. How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers? 
+Select Count(distinct cust.acctnum), Avg(quantity*price)
+From BIT_DB.FebSales feb
+Left Join BIT_DB.customers cust
+On feb.orderID=cust.order_id
+Where feb.Quantity>=2
+And length(orderID)=6
+And orderID<>"Order ID";
