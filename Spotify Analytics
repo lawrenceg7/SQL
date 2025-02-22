@@ -23,6 +23,14 @@ tempo decimal(6,3) NOT NULL,
 duration_ms integer NOT NULL,
 time_signature integer NOT NULL );
 
+#Then I inserted the Spotify Data .csv into the table.
+
+#Next, I explored the data using the following SQL. 
+
+Select *
+From BIT_DB.Spotifydata
+Limit 5;
+
 #1. Select the top 10 songs and the artist, starting with the most popular.
 Select artist_name, track_name
 From BIT_DB.Spotifydata
